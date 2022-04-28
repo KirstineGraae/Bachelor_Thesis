@@ -12,7 +12,7 @@ It is important that the data files are used in the correct order - some datafil
 *Explore_Data.py* <br />
 *Tendencies.py* 
 
-**Intersection.py**
+**Intersection.py** <br />
 *Descriptive_statistics.py* <br />
 
 # Need packages
