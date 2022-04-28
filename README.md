@@ -17,10 +17,12 @@ It is important that the data files are used in the correct order - some datafil
 
 # Need packages
 
+* Ptyhon3.8 or Python 3.9 (Python 10 can, at the moment, not be used to generate the figures correctly)
 * numpy 
 * pandas
 * matplotlib.pyplot
 * collections
+* Pickle
 
 
 
