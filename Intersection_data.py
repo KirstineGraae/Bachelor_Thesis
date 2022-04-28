@@ -8,8 +8,6 @@ import matplotlib.pyplot as plt
 
 con_data = pd.read_csv('./Data/con_data_clean.csv',sep=',',low_memory= False)
 order_data = pd.read_csv('./Data/order_data_clean.csv',sep=',')
-con_data = con_data.rename(columns={'Ordineret lægemiddel ATC5': 'ATC5'})
-order_data = order_data.rename(columns={'Varer ATC5': 'ATC5'})
 
 def change_V07(df):
     s = df['ATC5'].str.slice(stop=3)
