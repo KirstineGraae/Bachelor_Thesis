@@ -45,12 +45,12 @@ def plot_dates(df,name,j,weekly_orders):
     #Plot
     fig, ax = plt.subplots(figsize=(10, 5))
     plt.grid(color='grey', linestyle='--', linewidth=0.3,zorder=0)
-    ax.plot(df['Date'], df['Number_ordinations'], ls='--', alpha=0.6, color='#ff1493', label='Weekly consumption',zorder=2)
-    ax.plot(df['Date'],orders,color = '#008B8B',label = 'Weekly orders',zorder = 2)
+    ax.plot(df['Date'], df['Number_ordinations'], alpha=0.6, color='#ff1493', label='Weekly consumption',zorder=2)
+    ax.plot(df['Date'],orders,color = '#226EC2',label = 'Weekly orders',zorder = 2)
     ax.set_xlabel('Week number')
     ax.set_ylabel('Number of consumptions')
     plt.title('Medicine consumption for {}'.format(name))
-    plt.xticks(df['Date'],rotation=45,fontsize=10)
+    plt.xticks(df['Date'],rotation=60,fontsize=10)
     ax.legend()
     plt.savefig('./Figures/Department_orders_consumptions{}.png'.format(j),dpi=600)
 

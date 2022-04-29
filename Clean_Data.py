@@ -127,6 +127,7 @@ if zero_consumptions != 0:
 con_data = con_data.loc[con_data.index.repeat(con_data['Number_ordinations'])].reset_index(drop=True)
 con_data['Number_ordinations'] = 1
 
+print(a)
 #Save CSV
 con_data.to_csv('./Data/con_data.csv',index = False)
 order_data.to_csv('./Data/order_data.csv',index = False)

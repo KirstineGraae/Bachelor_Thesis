@@ -1,13 +1,8 @@
 import pandas as pd
 import pickle
-import datetime as dt
-from scipy.stats import t
-import numpy as np
-from collections import Counter
-import matplotlib.pyplot as plt
 
-con_data = pd.read_csv('./Data/con_data_clean.csv',sep=',',low_memory= False)
-order_data = pd.read_csv('./Data/order_data_clean.csv',sep=',')
+con_data = pd.read_csv('./Data/con_data.csv',sep=',',low_memory= False)
+order_data = pd.read_csv('./Data/order_data.csv',sep=',')
 
 def change_V07(df):
     s = df['ATC5'].str.slice(stop=3)
@@ -20,13 +15,13 @@ con_data = change_V07(con_data)
 order_data = change_V07(order_data)
 
 def ATC_matching(order_data, con_data):
-    dep = list(set(con_data['Udleveringsoverafdeling navn']))
+    dep = list(set(con_data['Department']))
     dep.sort()
     ATC_table = []
     ATC_dict = {}
     for i, name in enumerate(dep):
-        df = con_data[con_data['Udleveringsoverafdeling navn'].isin([dep[i]])]
-        df1 = order_data[order_data['Udleveringsoverafdeling navn'].isin([dep[i]])]
+        df = con_data[con_data['Department'].isin([dep[i]])]
+        df1 = order_data[order_data['Department'].isin([dep[i]])]
 
         con_ATC5,order_ATC5 = set(df['ATC5']), set(df1['ATC5'])
         ATC5_int = con_ATC5.intersection(order_ATC5)
@@ -51,8 +46,8 @@ def remove_not_intersection(dict, df, df1):
 
     for i, key in enumerate(keys):
         # Locate where they are used
-        df2 = df.loc[lambda df: df['Udleveringsoverafdeling navn'] == key]
-        df3 = df1.loc[lambda df1: df1['Udleveringsoverafdeling navn'] == key]
+        df2 = df.loc[lambda df: df['Department'] == key]
+        df3 = df1.loc[lambda df1: df1['Department'] == key]
         # Remove ATCs not in intersection
         df2 =  df2[df2['ATC5'].isin(values[i])]
         df3 = df3[df3['ATC5'].isin(values[i])]
@@ -79,14 +74,15 @@ def not_needed_deps(dict):
 
 remove_list = not_needed_deps(ATC_dict)
 
-con_data = con_data[(con_data['Udleveringsoverafdeling navn'] != remove_list[0]) & (con_data['Udleveringsoverafdeling navn'] != remove_list[1])]
-order_data = order_data[(order_data['Udleveringsoverafdeling navn'] != remove_list[0]) & (order_data['Udleveringsoverafdeling navn'] != remove_list[1])]
+con_data = con_data[(con_data['Department'] != remove_list[0])]
+order_data = order_data[(order_data['Department'] != remove_list[0])]
 
 for i in remove_list:
     del ATC_dict[i]
+
 #Save data as files
-con_data.to_csv('./Data/con_data_final.csv',index = False)
-order_data.to_csv('./Data/order_data_final.csv',index = False)
+con_data.to_csv('./Data/con_data_ATC_match.csv',index = False)
+order_data.to_csv('./Data/order_data_ATC_match.csv',index = False)
 
 #Save pickle of consumption department names
 with open("./Data/ATC_dict", "wb") as fp:
