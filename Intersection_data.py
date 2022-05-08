@@ -1,14 +1,14 @@
 import pandas as pd
 import pickle
 
-con_data = pd.read_csv('./Data/con_data.csv',sep=',',low_memory= False)
-order_data = pd.read_csv('./Data/order_data.csv',sep=',')
+con_data = pd.read_csv('./Data/con_data.csv', sep=',', low_memory= False)
+order_data = pd.read_csv('./Data/order_data.csv', sep=',')
 
 def change_V07(df):
     s = df['ATC5'].str.slice(stop=3)
     a = s[s == 'V07'].index
     for i in range(len(a)):
-        df.at[a[i],'ATC5'] = 'V07'
+        df.at[a[i], 'ATC5'] = 'V07'
     return df
 
 con_data = change_V07(con_data)
@@ -80,10 +80,10 @@ order_data = order_data[(order_data['Department'] != remove_list[0])]
 for i in remove_list:
     del ATC_dict[i]
 
-#Save data as files
+# Save data as files
 con_data.to_csv('./Data/con_data_ATC_match.csv',index = False)
 order_data.to_csv('./Data/order_data_ATC_match.csv',index = False)
 
-#Save pickle of consumption department names
+# Save pickle of consumption department names
 with open("./Data/ATC_dict", "wb") as fp:
     pickle.dump(ATC_dict, fp)

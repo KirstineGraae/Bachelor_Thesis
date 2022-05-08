@@ -13,7 +13,7 @@ with open("./Data/ATC_dict", "rb") as fp:
 con_data = pd.read_csv('./Data/con_data_ATC_match.csv',sep=',',low_memory= False)
 order_data = pd.read_csv('./Data/order_data_ATC_match.csv',sep=',',low_memory = False)
 
-def table1(df,dict):
+def statstable(df,dict):
     keys = list(dict.keys())
     stats = {}
     df['Ordinationsoprettelsesdato'] = pd.to_datetime(df['Ordinationsoprettelsesdato'])
@@ -34,7 +34,7 @@ def table1(df,dict):
         stats[key] = [np.round(m),np.round(s),np.round(conf_int)]
     return stats
 
-stats = table1(con_data,ATC_dict)
+stats = statstable(con_data,ATC_dict)
 
 def names_shortened(dict):
     keys = list(dict.keys())
@@ -103,6 +103,3 @@ def polar_plots(df,key,top_ATC):
 
 #for i in list(ATC_dict.keys()):
     #polar_plots(con_data,i,top_ATC_con)
-
-
-print(a)
