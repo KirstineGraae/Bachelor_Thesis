@@ -40,7 +40,7 @@ def order_portions_part1(order_data):
     df1[1] = df1[1].map(lambda x: 'none' if ([i for i in x if i == '(']) else x)
     # The quantity of units will be the only number in the column
     df1['Quantity'] = df1[1].map(lambda x: ''.join([i for i in x if i.isdigit()]))
-    df1['Quantity'] = df1['Quantity'].replace('', 0)
+    df1['Quantity'] = df1['Quantity'].replace('', 0,regrex=True)
 
     return df1[0], df1['Portionsize'], df1['Quantity']
 
