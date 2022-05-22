@@ -10,14 +10,16 @@ It is important that the data files are used in the correct order - some datafil
 
 **Clean_Data.py** <br />
 - Generates the datafiles "order_data.csv" and "con_data.csv"<br />
-- 
+
 **sort_patients_weekly.py** <br />
 - Generates the data_file "patients_arrived.csv"<br />
-- 
+
 **Intersection.py** <br />
 - Updates "order_data" and "con_data"<br />
+
 **Order_Portions.py** <br />
 - Updates "order_data" to get medicine units for each order<br />
+
 **Get_matching_names.py** <br />
 - Updates "order_data" and "con_data" <br />
 *Explore_Data.py* <br />
