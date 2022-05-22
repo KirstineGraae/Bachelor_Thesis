@@ -12,7 +12,7 @@ It is important that the data files are used in the correct order - some datafil
 - Generates the datafiles *order_data.csv* and *con_data.csv*<br />
 
 **sort_patients_weekly.py** <br />
-- Generates the data_file *patients_arrived.csv*<br />
+- Generates the datafile *patients_arrived.csv*<br />
 
 **Intersection.py** <br />
 - Updates *order_data.csv* and *con_data.csv*<br />
