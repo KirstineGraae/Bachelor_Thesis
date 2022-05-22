@@ -29,17 +29,31 @@ It is important that the data files are used in the correct order - some datafil
 **Tendencies.py** <br />
 - Generates plot of weekly consumptions, orders and patients for each department <br />
 
+**Table_stats.py** <br />
+- Generates simple statistics relevant to the project <br />
+
 **Delete_all_non_keys.py** <br />
 - Generates updated *order_data.csv* and *con_data.csv* and names the new files *matched_order_data.csv* and *matched_con_data.csv*<br />
 
 # Need packages
 
-* Ptyhon3.8 or Python 3.9 (Python 10 can, at the moment, not be used to generate the figures correctly)
+* Python3.8 or Python 3.9 (Python 10 can, at the moment, not be used to generate the figures correctly)
 * numpy 
 * pandas
+* matplotlib
 * matplotlib.pyplot
 * collections
 * Pickle
+* json
+* requests
+* re
+* from bs4 import BeautifulSoup
+* nltk
+* from nltk import word_tokenize
+* from itertools import combinations
+* networkx
+* netwulf
+* community
 
 
 
