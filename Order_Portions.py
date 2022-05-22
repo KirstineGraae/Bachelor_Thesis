@@ -1,8 +1,8 @@
 import pandas as pd
 from collections import Counter
 
-con_data = pd.read_csv('./Data/con_data_ATC_match.csv',sep=',',low_memory= False)
-order_data = pd.read_csv('./Data/order_data_ATC_match.csv',sep=',',low_memory = False)
+con_data = pd.read_csv('./Data/con_data.csv',sep=',',low_memory= False)
+order_data = pd.read_csv('./Data/order_data.csv',sep=',',low_memory = False)
 #apo_data = pd.read_csv('./Data/Apovision_data.csv', sep=',',header=0,usecols = [2,3,4,5,15,16,17,18,22],low_memory=False)
 
 def is_number(n):
@@ -40,7 +40,7 @@ def order_portions_part1(order_data):
     df1[1] = df1[1].map(lambda x: 'none' if ([i for i in x if i == '(']) else x)
     # The quantity of units will be the only number in the column
     df1['Quantity'] = df1[1].map(lambda x: ''.join([i for i in x if i.isdigit()]))
-    df1['Quantity'] = df1['Quantity'].replace('', 0,regrex=True)
+    df1['Quantity'] = df1['Quantity'].replace('', 0)
 
     return df1[0], df1['Portionsize'], df1['Quantity']
 
@@ -168,7 +168,6 @@ def clean_orders(df):
     return df
 order_data = clean_orders(order_data)
 
-order_data.to_csv('./Data/order_data_portions_added.csv', index=False)
+order_data.to_csv('./Data/order_data.csv', index=False)
 
 
-print(a)

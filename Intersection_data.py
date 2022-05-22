@@ -81,8 +81,8 @@ for i in remove_list:
     del ATC_dict[i]
 
 # Save data as files
-con_data.to_csv('./Data/con_data_ATC_match.csv',index = False)
-order_data.to_csv('./Data/order_data_ATC_match.csv',index = False)
+con_data.to_csv('./Data/con_data.csv',index = False)
+order_data.to_csv('./Data/order_data.csv',index = False)
 
 # Save pickle of consumption department names
 with open("./Data/ATC_dict", "wb") as fp:

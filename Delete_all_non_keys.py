@@ -2,8 +2,8 @@ import pandas as pd
 import numpy as np
 from collections import Counter
 
-con_data = pd.read_csv('./Data/con_with_keys1.csv',sep=',',low_memory= False)
-order_data = pd.read_csv('./Data/order_with_keys1.csv',sep=',',low_memory= False)
+con_data = pd.read_csv('./Data/con_data.csv',sep=',',low_memory= False)
+order_data = pd.read_csv('./Data/order_data.csv',sep=',',low_memory= False)
 apo = pd.read_csv('./Data/Apovision_data.csv', sep=';',low_memory=False)
 
 con_rem = con_data[con_data['Key'] =='0.0']
@@ -39,5 +39,7 @@ for key in list(dict_con.keys()):
     if dict_con[key] <= dict_order[key]:
         larger_orders.append(key)
 
-print(a)
+order_data.to_csv('./Data/matched_order_data.csv',index=False)
+con_data.to_csv('./Data/matched_con_data.csv',index=False)
+
 

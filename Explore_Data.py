@@ -1,6 +1,7 @@
 import pandas as pd
 from collections import Counter
 import matplotlib.pyplot as plt
+import seaborn as sns
 
 # Your datapath
 data_path = './Data'
@@ -26,31 +27,36 @@ def dictionary_order(df):
     departments = list(set(df['Department']))
     for dep in departments:
         df1 = df.loc[lambda df: df['Department'] == dep]
-        dictionary[dep] = df1['Number_of_Packages'].sum()
+        df1['Units'] = df1['Number_of_Packages']*df1['Quantity']
+        dictionary[dep] = df1['Units'].sum()
     dictionary = dict(sorted(dictionary.items()))
     return dictionary
 
 order_dict = dictionary_order(order_data)
 
-def plot_departments(dictionary,con = True):
-    if con == True:
-        fig, ax = plt.subplots(figsize=(10, 5))
-        plt.grid(color='grey', linestyle='--', linewidth=0.5, zorder=0)
-        plt.bar(dictionary.keys(), dictionary.values(), color='#C291A4', zorder=2)
-        plt.title('Number of consumptions per department in 2021')
-        ax.set_xlabel('Departments')
-        ax.set_ylabel('Number of consumptions')
-        plt.savefig('./Figures/Consumptions.png',dpi=600)
+def to_df(dict1,dict2):
+    g = []
+    h = []
+    g.append(list(dict1.values()))
+    g.append(list(dict2.values()))
+    g = [item for sublist in g for item in sublist]
+    h.append(['Consumptions']*len(dict1))
+    h.append(['Orders']*len(dict2))
+    h = [item for sublist in h for item in sublist]
+    df = pd.DataFrame(list(zip(list(dict1.keys())*2,g,h)),columns=['Department','Units','Type'])
+    return df
+df = to_df(con_dict,order_dict)
 
-    else:
-        fig, ax = plt.subplots(figsize=(10, 5))
-        plt.grid(color='grey', linestyle='--', linewidth=0.5, zorder=0)
-        plt.bar(dictionary.keys(), dictionary.values(), color='#00b3b3', zorder=2)
-        plt.title('Number of orders per department in 2021')
-        ax.set_xlabel('Departments')
-        ax.set_ylabel('Number of orders')
-        plt.savefig('./Figures/Orders.png', dpi=600)
+def plot_departments(df):
+    colors = ['#C291A4','#889BAE']
+    sns.set_palette(sns.color_palette(colors))
+    ax1 = sns.set_style("darkgrid", {"grid.color": ".6", "grid.linestyle": ":"})
+    fig, ax1 = plt.subplots(figsize=(12, 6))
+    p = sns.barplot(data = df,x = 'Department',y='Units',hue = 'Type',ax=ax1)
+    p.set_xlabel('Department', fontsize=10)
+    p.set_ylabel('Number of Units Consumed and Ordered', fontsize=10)
+    p.set_title('Total Number of Consumptions and Orders for all Departments',fontsize=15)
+    plt.savefig('./Figures/Total_Units.png')
 
-plot_departments(con_dict, con=True)
-plot_departments(order_dict, con=False)
+plot_departments(df)
 

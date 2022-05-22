@@ -44,7 +44,6 @@ def clean_con(con_data):
     # Give new names
     con_data.columns = new_names
     con_data['Department'] = con_data['Department'].str.split(',').str[0]
-    con_data['Department'].str.replace(r'[^0-9]+', '', regex=True)
     con_data['Date'] = pd.to_datetime(con_data['Date'])
 
     return con_data
