@@ -76,3 +76,45 @@ print(table2)
 
 
 print(a)
+
+
+#######################################################################################################################
+
+# Make a copy of the dataframe
+dfk = df.copy()
+
+# Drop the Sum column
+dfk = dfk.drop('CumAnnualConsumptionValue', 1)
+dfk = dfk.drop('SumAnnualConsumptionValue', 1)
+dfk = dfk.drop('CumPct', 1)
+dfk = dfk.drop('Class', 1)
+
+# Set keys as index
+dfk = dfk.set_index('index')
+
+# Build k-means model with 3 cluster (A, B and C)
+model = KMeans(3)
+# Fit model
+model.fit(dfk)
+
+# Visualize
+identified_clusters = model.fit_predict(dfk)
+data_with_clusters = dfk.copy()
+data_with_clusters['Clusters'] = identified_clusters
+plt.scatter(data_with_clusters['Qty'], data_with_clusters['AnnualConsumptionValue'], c=data_with_clusters['Clusters'], cmap='rainbow')
+plt.show()
+
+# Extract the cluster id from labels_ and assign it to each SKU in the dataframe.
+dfk.loc[:, 'Cluster'] = model.labels_
+class_map = {0: "C", 1: "B", 2: "A"}
+dfk["class_kmeans"] = dfk["Cluster"].apply(lambda x: class_map[x])
+
+tablek = dfk.groupby('Cluster').agg(
+    Items=('Cluster', 'count'),
+    Qty=('Qty', sum),
+    Cost=('UnitCost', sum)
+)
+
+print(tablek)
+
+#######################################################################################################################
