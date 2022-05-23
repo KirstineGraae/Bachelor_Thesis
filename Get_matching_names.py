@@ -4,9 +4,9 @@ from collections import Counter
 import warnings
 warnings.filterwarnings("ignore")
 
-con_data = pd.read_csv('./Data/con_data_ATC_match.csv',sep=',',low_memory= False)
+con_data = pd.read_csv('./Data/con_data.csv',sep=',',low_memory= False)
 apo = pd.read_csv('./Data/Apovision_data.csv', sep=';',low_memory=False)
-order_data = pd.read_csv('./Data/order_data_portions_added.csv',sep=',',low_memory= False)
+order_data = pd.read_csv('./Data/order_data.csv',sep=',',low_memory= False)
 
 order_data['ATC5'] = order_data['ATC5'].str.replace('*','')
 order_data['Adm_way'] = np.zeros(len(order_data))
@@ -82,11 +82,5 @@ con_ATC = list(set(con_data['ATC5']))
 for k,ATC in enumerate(con_ATC):
     con_data = clean_hope1(con_data,apo,ATC,k,len(con_ATC))
 
-order_data.to_csv('./Data/order_with_keys1.csv',index=False)
-con_data.to_csv('./Data/con_with_keys1.csv',index=False)
-print(a)
-#a = [','.join(map(str, l)) for l in con_data['Key'] if l != np.float()]
-#aa = set(a)
-#b = [','.join(map(str, l)) for l in order_data['Key'] if l != np.float()]
-#bb = set(b)
-#aa.intersection(bb)
+order_data.to_csv('./Data/order_data.csv',index=False)
+con_data.to_csv('./Data/con_data.csv',index=False)
