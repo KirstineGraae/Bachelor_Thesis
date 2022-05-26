@@ -24,11 +24,11 @@ def ABCClassify(perc):
     Creates the 3 classes A, B, and C based
     on quantity % (A-80%, B-15%, C-5%)
     """
-    if perc > 0 and perc < 0.8:
+    if perc > 0 and perc < 0.9:
         return 'A'
-    elif perc >= 0.8 and perc < 0.95:
+    elif perc >= 0.9 and perc < 0.99:
         return 'B'
-    elif perc >= 0.95:
+    elif perc >= 0.99:
         return 'C'
 
 # Make dict with number of consumptions for each key
@@ -42,7 +42,7 @@ qty = dict(dict_con)
 # Dictionary where keys are item (ATC code) and values are cost per unit (yearly dkk divided by qty)
 data = order_data[['Key', 'Cost', 'Units']]
 # Drop L01XD04
-data = data[data.Key != "['L01XD04', '30', 'MGM', 'OR']"]
+#data = data[data.Key != "['L01XD04', '30', 'MGM', 'OR']"]
 # Find sum of cost and units
 data = data.groupby('Key').sum()
 # Calculate cost per unit
@@ -112,8 +112,8 @@ plt.ylabel('Running Total Percentage')
 plt.title('ABC Analysis - Cumulative Cost per item')
 plt.grid(True)
 plt.ylim(0, 1)
-graph.axhline(0.80)
-graph.axhline(0.95)
+graph.axhline(0.90)
+graph.axhline(0.99)
 plt.show()
 
 # Make a list of A keys
