@@ -2,10 +2,12 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 from sklearn.cluster import KMeans
+#Load data
+df1 = pd.read_csv('./Data/matched_con_data.csv', sep=',', low_memory= False)
+df2 = pd.read_csv('./Data/matched_order_data.csv', sep=',', low_memory=False)
 
 # Find annual demand (quantity) from the consumption for each item
 # Dictionary where keys are item (ATC code) and values are annual demand (# of ordinations)
-df1 = pd.read_csv('./Data/con_data_ATC_match.csv', sep=',', low_memory= False)
 keys = list(df1['ATC5'])
 qty = dict()
 for i in keys:
@@ -13,8 +15,7 @@ for i in keys:
 
 # Find cost per unit (unit cost) from the orders for each item
 # Dictionary where keys are item (ATC code) and values are cost per unit (yearly dkk divided by qty)
-columns = ['ATC5', 'Cost', 'Number_of_Packages', 'Quantity']
-df2 = pd.read_csv('./Data/order_data_portions_added.csv', sep=',', low_memory=False, usecols=columns)
+#columns = ['ATC5', 'Cost', 'Units']
 df2['CostPerUnit'] = (df2['Number_of_Packages'] * df2['Quantity']) / df2['Cost']
 unitcost = pd.Series(df2.CostPerUnit.values, index=df2.ATC5).to_dict()
 
@@ -24,7 +25,7 @@ df.columns = ['d{}'.format(i) for i, col in enumerate(df, 1)]
 df.columns = ['Qty', 'UnitCost']
 # Make a column with index (ATC codes)
 df = df.reset_index(level=0)
-
+print(a)
 # Drop row with inf value (J07BX03)
 # Drop row with NaN value (H01CB02)
 df.replace(np.inf, np.nan, inplace=True)
@@ -66,7 +67,6 @@ df.groupby('cluster').agg(
 )
 
 
-print(a)
 #plt.scatter(df['d1'], df['d2'])
 #plt.show()
 x = df.iloc[:, 1:2].reshape(-1, 1)
@@ -80,4 +80,3 @@ dctAnalysis = abc_analysis(abc_list, True)
 abc_plot(dctAnalysis)
 
 
-print(a)

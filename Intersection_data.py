@@ -11,18 +11,21 @@ def change_V07(df):
         df.at[a[i], 'ATC5'] = 'V07'
     return df
 
-con_data = change_V07(con_data)
-order_data = change_V07(order_data)
+#con_data = change_V07(con_data)
+#order_data = change_V07(order_data)
 
 def ATC_matching(order_data, con_data):
-    dep = list(set(con_data['Department']))
+    dep = sorted(list(set(con_data['Department'])))
     dep.sort()
     ATC_table = []
     ATC_dict = {}
+    c_b = []
+    o_b = []
     for i, name in enumerate(dep):
         df = con_data[con_data['Department'].isin([dep[i]])]
         df1 = order_data[order_data['Department'].isin([dep[i]])]
-
+        c_b.append(len(set(df['ATC5'])))
+        o_b.append(len(set(df1['ATC5'])))
         con_ATC5,order_ATC5 = set(df['ATC5']), set(df1['ATC5'])
         ATC5_int = con_ATC5.intersection(order_ATC5)
         ATC_dict[name] = list(ATC5_int)
@@ -32,9 +35,9 @@ def ATC_matching(order_data, con_data):
     ATC_df = pd.DataFrame(ATC_table,index = dep)
     ATC_df.columns = ['Consumption_ATC','Order_ATC','Intersection_ATC']
 
-    return ATC_df, ATC_dict
+    return ATC_df, ATC_dict,dep,c_b,o_b
 
-ATC_df, ATC_dict = ATC_matching(order_data, con_data)
+ATC_df, ATC_dict,dep,c_b,o_b = ATC_matching(order_data, con_data)
 
 def remove_not_intersection(dict, df, df1):
 
@@ -61,18 +64,18 @@ def remove_not_intersection(dict, df, df1):
 
 con_data, order_data = remove_not_intersection(ATC_dict, con_data, order_data)
 
-def not_needed_deps(dict):
+def not_needed_deps(dict,df):
     keys = list(dict.keys())
     values = list(dict.values())
     remove_list = []
-    for i in range(len(values)):
-        if len(values[i]) <= 20:
-            remove_list.append(keys[i])
+    for key in keys:
+        if len(df[df['Department'] == key]) <= 365:
+            remove_list.append(key)
         else:
             continue
     return remove_list
 
-remove_list = not_needed_deps(ATC_dict)
+remove_list = not_needed_deps(ATC_dict,con_data)
 
 con_data = con_data[(con_data['Department'] != remove_list[0])]
 order_data = order_data[(order_data['Department'] != remove_list[0])]
@@ -87,3 +90,4 @@ order_data.to_csv('./Data/order_data.csv',index = False)
 # Save pickle of consumption department names
 with open("./Data/ATC_dict", "wb") as fp:
     pickle.dump(ATC_dict, fp)
+
