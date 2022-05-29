@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 from collections import Counter
 from sklearn.cluster import KMeans
 from scipy.cluster.hierarchy import dendrogram, linkage
+import json
 #import plotly.express as px
 import pickle
 from scipy.stats import t
@@ -119,7 +120,8 @@ plt.show()
 # Make a list of A keys
 df1 = df[df['Class'] == 'A']
 key_list = list(df1.index)
-
+with open('./Data/A_keys.json', 'w') as f:
+    json.dump(key_list, f)
 
 # Make a copy of the dataframe
 dfd = df1.copy()
