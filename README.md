@@ -47,13 +47,15 @@ It is important that the data files are used in the correct order - some datafil
 * json
 * requests
 * re
-* from bs4 import BeautifulSoup
+* bs4
 * nltk
-* from nltk import word_tokenize
-* from itertools import combinations
+* itertools
 * networkx
 * netwulf
 * community
+* Seaborn-qqplot
+* scipy
+* statistics
 
 
 

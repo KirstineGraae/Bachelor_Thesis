@@ -39,4 +39,3 @@ unique_ATC.append(len(set(order_data['Key'])))
 
 df = pd.DataFrame(list(zip(departments,unique_ATC,cons,orders,spend,percentage_c,percentage_o,percentage_s)),columns=['Department','Unique Keys','Units Consumed','Units Ordered','Total Cost','% of all Consumptions','% of all Orders','% of Total Spend'])
 a = df.to_latex(index=False)
-print(a)

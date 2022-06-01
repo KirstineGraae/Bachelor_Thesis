@@ -85,4 +85,3 @@ for k,ATC in enumerate(con_ATC):
 order_data.to_csv('./Data/order_data.csv',index=False)
 con_data.to_csv('./Data/con_data.csv',index=False)
 
-print(a)
