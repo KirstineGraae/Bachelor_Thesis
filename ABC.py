@@ -98,11 +98,14 @@ print('Percent of Cost of Class C :', df[df.Class == 'C']['AnnualConsumptionValu
 print(df.describe())
 
 # Scatterplot
-fig, scatter = plt.subplots(dpi=100)
+ax1 = sns.set_style("darkgrid", {"grid.color": ".6", "grid.linestyle": ":"})
+fig, ax1 = plt.subplots(figsize=(12, 6))
 scatter = sns.scatterplot(data=df, x="Qty", y="AnnualConsumptionValue", hue="Class", size="UnitCost", palette="husl", legend=False)
-scatter.set_title("Quantity vs Annual Consumption Value")
-sns.set(style="darkgrid")
-plt.show()
+scatter.set_title("Quantity vs Annual Consumption Value",fontsize=20)
+scatter.set_xlabel('Quantity',fontsize=15)
+scatter.set_ylabel('Annual Consumption Value',fontsize=15)
+plt.savefig('./Figures/ABCScatter.png')
+plt.close('all')
 
 # Graph
 performance = df['CumPct'].tolist()

@@ -15,6 +15,9 @@ con_dict = json.load(f)
 f = open('./Data/weekly_orders_Akeys.json')
 order_dict = json.load(f)
 
+f = open('./Data/Patients_Weekly.json')
+pw = json.load(f)
+
 def des_stat(d):
     keys = sorted(d.keys())
     mini = []
@@ -58,7 +61,8 @@ def choose_identifiers(df,d):
     return con_dict_updated
 
 con_dict_updated = choose_identifiers(con_stat,con_dict)
-
+with open('./Data/c1.json', 'w') as f:
+    json.dump(con_dict_updated, f)
 def test_normality(d):
     keys = []
     p_val = []
@@ -109,6 +113,11 @@ def new_df(d):
     df['Holidays'] = holiday_calender
     return df
 
+def new_df1(d,p):
+    df = pd.DataFrame.from_dict(d,orient='columns')
+    df['Patients'] = p.values()
+    return df
+
 def corrfunc(x, y, **kws):
     r, _ = stats.pearsonr(x, y)
     ax = plt.gca()
@@ -126,24 +135,31 @@ def cor_plot(df):
     plt.savefig('./Figures/Correlation_Holidays.png')
     plt.close('all')
 
-def corr_matrix(df):
+def corr_matrix(df,j):
     ax1 = sns.set_style("darkgrid", {"grid.color": ".6", "grid.linestyle": ":"})
     fig, ax1 = plt.subplots(figsize=(17, 12))
     corr = df.corr()
     sns.heatmap(corr,
                 xticklabels=corr.columns.values,
                 yticklabels=corr.columns.values,ax=ax1,cmap='Blues_r',annot=True)
-    ax1.set_title('Correlation Matrix for Condumed Medicine and Holidays',fontsize=25)
     plt.yticks(rotation=-30)
     plt.xticks(rotation=30)
-    plt.savefig('./Figures/Correlation_Matrix.png')
+    if j == 'Holidays':
+        ax1.set_title('Correlation Matrix for Condumed Medicine and Holidays',fontsize=25)
+        plt.savefig('./Figures/Correlation_Matrix_H.png')
+    elif j == 'Patients':
+        ax1.set_title('Correlation Matrix for Consumed Medicine and Holidays',fontsize=25)
+        plt.savefig('./Figures/Correlation_Matrix_P.png')
 
 
 df1 = new_df(con_dict_updated)
-cor_plot(df1)
-corr_matrix(df1)
 
-print(a)
+cor_plot(df1)
+corr_matrix(df1,j='Holidays')
+
+df2 = new_df1(con_dict_updated,pw)
+corr_matrix(df2,j='Patients')
+
 
 
 
