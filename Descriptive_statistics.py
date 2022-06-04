@@ -7,7 +7,12 @@ import matplotlib.pyplot as plt
 from seaborn_qqplot import pplot
 import numpy as np
 import collections
+import random
 import statsmodels.stats.api as sms
+from numpy.random import normal
+import statsmodels.api as sm
+from statsmodels.graphics.gofplots import qqplot_2samples
+
 #Load Data
 f = open('./Data/weekly_consumptions_Akeys.json')
 con_dict = json.load(f)
@@ -23,6 +28,7 @@ def des_stat(d):
     mini = []
     maxi = []
     avg = []
+    med = []
     std = []
     coeff = []
     zero_count = []
@@ -33,6 +39,7 @@ def des_stat(d):
         mini.append(min(d[key]))
         maxi.append(max(d[key]))
         avg.append(round(st.mean(d[key]),2))
+        med.append(round(st.median(d[key]),2))
         total.append(sum(d[key]))
         std.append(round(st.pstdev(d[key]),2))
         coeff.append(round(st.pstdev(d[key])/st.mean(d[key]),2))
@@ -42,8 +49,8 @@ def des_stat(d):
         conf_int.append(ci)
     keys = [w.replace('[', '$[') for w in keys]
     keys = [w.replace(']', ']$') for w in keys]
-    df = pd.DataFrame(list(zip(keys,mini,maxi,avg,total,std,conf_int,coeff,zero_count)), columns=['Identifier','Minimum','Maximum',
-                                                                                      'Average','Total','Standard Deviation','Confidence Interval','Coefficient of Variation','Weeks with 0 Units'])
+    df = pd.DataFrame(list(zip(keys,mini,maxi,avg,med,total,std,conf_int,coeff,zero_count)), columns=['Identifier','Minimum','Maximum',
+                                                                                      'Average','Median','Total','Standard Deviation','Confidence Interval','Coefficient of Variation','Weeks with 0 Units'])
     return df
 
 
@@ -63,6 +70,7 @@ def choose_identifiers(df,d):
 con_dict_updated = choose_identifiers(con_stat,con_dict)
 with open('./Data/c1.json', 'w') as f:
     json.dump(con_dict_updated, f)
+
 def test_normality(d):
     keys = []
     p_val = []
@@ -83,82 +91,34 @@ def to_df(d):
     d = collections.OrderedDict(sorted(d.items()))
     week = list(np.arange(1,54,1))*len(d)
     vals = [item for sublist in list(d.values()) for item in sublist]
+    dist = []
     id = []
     for i,key in enumerate(d.keys()):
         l = [key]*len(d[key])
         id.append(l)
+        dist.append(list(normal(loc=0, scale=1,
+                    size=len(d[key]))))
     id = [item for sublist in id for item in sublist]
-    df = pd.DataFrame(list(zip(id,week,vals)), columns=['Identifier', 'Week','Number of Consumed Units'])
+    dist = [item for sublist in dist for item in sublist]
+    df = pd.DataFrame(list(zip(id,week,vals,dist)), columns=['Identifier', 'Week','Number of Consumed Units','Distribution'])
     return df
-
-df = to_df(con_dict_updated)
-
 def QQ(df):
     ax1 = sns.set_style("darkgrid", {"grid.color": ".6", "grid.linestyle": ":"})
     fig, ax1 = plt.subplots(figsize=(12, 6))
-    p = pplot(df,x='Week', y='Number of Consumed Units', hue='Identifier', kind='qq', height=8, aspect=2,
-               display_kws={"identity": False, "fit": True, "reg": True, "ci": 0.025})
-    p.fig.suptitle('Quantile-Quantile plot for the identifiers',fontsize=25)
-    p.axes[0,0].set_xlabel('Week Number',fontsize=15)
-    p.axes[0, 0].set_ylabel('Number of Consumed Units', fontsize=15)
+    p = pplot(df,x='Distribution', y='Number of Consumed Units',hue='Identifier', kind='qq', height=8, aspect=2,
+               display_kws={"identity": False, "fit": True, "reg": True, "ci": 0.05})
+    p.fig.suptitle('Quantile-Quantile Plot Medicine Consumption',fontsize=20)
+    p.axes[0,0].set_xlabel('Theoretical Quantile',fontsize=10)
+    p.axes[0,0].set_ylabel('Number of Consumed Units', fontsize=10)
     plt.savefig('./Figures/QQ.png')
     plt.close('all')
 
+df = to_df(con_dict_updated)
 QQ(df)
 
-def new_df(d):
-    df = pd.DataFrame.from_dict(d,orient='columns')
-    holiday_calender = [1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0,
-                0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1]
-    df['Holidays'] = holiday_calender
-    return df
-
-def new_df1(d,p):
-    df = pd.DataFrame.from_dict(d,orient='columns')
-    df['Patients'] = p.values()
-    return df
-
-def corrfunc(x, y, **kws):
-    r, _ = stats.pearsonr(x, y)
-    ax = plt.gca()
-    ax.annotate("r = {:.2f}".format(r),
-                xy=(.1, .9), xycoords=ax.transAxes)
-def cor_plot(df):
-    ax1 = sns.set_style("darkgrid", {"grid.color": ".6", "grid.linestyle": ":"})
-    fig, ax1 = plt.subplots(figsize=(12, 6))
-    g = sns.PairGrid(df, palette=["red"])
-    g.map_upper(plt.scatter, s=10)
-    g.map_diag(sns.distplot, kde=False)
-    g.map_lower(sns.kdeplot, cmap="Blues_d")
-    g.map_lower(corrfunc)
-    g.fig.suptitle('Correlation Between Consumed Medicine and Holidays')
-    plt.savefig('./Figures/Correlation_Holidays.png')
-    plt.close('all')
-
-def corr_matrix(df,j):
-    ax1 = sns.set_style("darkgrid", {"grid.color": ".6", "grid.linestyle": ":"})
-    fig, ax1 = plt.subplots(figsize=(17, 12))
-    corr = df.corr()
-    sns.heatmap(corr,
-                xticklabels=corr.columns.values,
-                yticklabels=corr.columns.values,ax=ax1,cmap='Blues_r',annot=True)
-    plt.yticks(rotation=-30)
-    plt.xticks(rotation=30)
-    if j == 'Holidays':
-        ax1.set_title('Correlation Matrix for Condumed Medicine and Holidays',fontsize=25)
-        plt.savefig('./Figures/Correlation_Matrix_H.png')
-    elif j == 'Patients':
-        ax1.set_title('Correlation Matrix for Consumed Medicine and Holidays',fontsize=25)
-        plt.savefig('./Figures/Correlation_Matrix_P.png')
 
 
-df1 = new_df(con_dict_updated)
 
-cor_plot(df1)
-corr_matrix(df1,j='Holidays')
-
-df2 = new_df1(con_dict_updated,pw)
-corr_matrix(df2,j='Patients')
 
 
 
