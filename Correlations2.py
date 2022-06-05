@@ -37,7 +37,7 @@ def new_df(d,p):
     df['Patients'] = p.values()
     return df
 
-def corr_table_holidays(df,k):
+def corr_table_patients(df,k):
     a = stats.pointbiserialr(df['Patients'], df[k])
     return [round(a[0],2),round(a[1],2)]
 
@@ -45,6 +45,6 @@ df1 = new_df(dict_con,pw)
 patients_corr = {}
 for key in sorted(dict_con.keys()):
     abb = key.split(',')[0]
-    patients_corr[abb] = corr_table_holidays(df1,key)
+    patients_corr[abb] = corr_table_patients(df1,key)
 df1 = pd.DataFrame.from_dict(patients_corr,columns=['Correlation Coefficient','P-value'],orient='index')
 t1 = df1.to_latex(index=True)

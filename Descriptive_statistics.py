@@ -91,17 +91,16 @@ def to_df(d):
     d = collections.OrderedDict(sorted(d.items()))
     week = list(np.arange(1,54,1))*len(d)
     vals = [item for sublist in list(d.values()) for item in sublist]
-    dist = []
     id = []
     for i,key in enumerate(d.keys()):
         l = [key]*len(d[key])
         id.append(l)
-        dist.append(list(normal(loc=0, scale=1,
-                    size=len(d[key]))))
     id = [item for sublist in id for item in sublist]
-    dist = [item for sublist in dist for item in sublist]
+    dist =(list(normal(loc=0, scale=1,
+                    size=len(d[key]))))*len(id)
     df = pd.DataFrame(list(zip(id,week,vals,dist)), columns=['Identifier', 'Week','Number of Consumed Units','Distribution'])
     return df
+
 def QQ(df):
     ax1 = sns.set_style("darkgrid", {"grid.color": ".6", "grid.linestyle": ":"})
     fig, ax1 = plt.subplots(figsize=(12, 6))

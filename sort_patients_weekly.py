@@ -20,7 +20,7 @@ def match_deps(order_data,patients):
 patients = match_deps(order_data,patients)
 wp = []
 
-for i in range(1,53):
+for i in range(0,53):
     wp.append('Week_{}'.format(i))
 
 def weekly_count(df,k,k1):
