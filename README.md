@@ -46,27 +46,7 @@ It is important that the data files are used in the correct order - some datafil
 **Correlations1.py** and **Correlations2.py**  <br />
 - Generates the correlation coefficients of the data.  <br />
 
-# Need packages
 
-* Python3.8 or Python 3.9 (Python 10 can, at the moment, not be used to generate the figures correctly)
-* numpy 
-* pandas
-* matplotlib
-* matplotlib.pyplot
-* collections
-* Pickle
-* json
-* requests
-* re
-* bs4
-* nltk
-* itertools
-* networkx
-* netwulf
-* community
-* Seaborn-qqplot
-* scipy
-* statistics
 
 
 
