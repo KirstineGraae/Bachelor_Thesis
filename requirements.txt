@@ -1,0 +1,16 @@
+Python == 3.9
+numpy == 1.21.6
+pandas ==1.4.2
+matplotlib == 3.5.1
+collection == 0.1.6
+requests == 2.27.1
+regex == 2022.3.15
+beautifulsoup4 == 4.11.1
+nltk == 3.7
+networkx == 2.8
+netwulf == 0.1.5
+community == 1.0.0b1
+seaborn == 0.11.2
+Seaborn-qqplot == 0.5.0
+scipy == 1.8.0
+statsmodels == 0.13.2
