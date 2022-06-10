@@ -10,7 +10,7 @@ It is important that the data files are used in the correct order - some datafil
 **Clean_Data.py** <br />
 - Generates the datafiles *order_data.csv* and *con_data.csv*<br />
 
-**sort_patients_weekly.py** <br />
+**Sort_Patients_Weekly.py** <br />
 - Generates the datafile *patients_arrived.csv*<br />
 
 **Intersection.py** <br />
@@ -19,10 +19,10 @@ It is important that the data files are used in the correct order - some datafil
 **Order_Portions.py** <br />
 - Updates *order_data.csv* to get medicine units for each order<br />
 
-**Get_matching_names.py** <br />
+**Get_Matching_Names.py** <br />
 - Updates *order_data.csv* and *con_data.csv* <br />
 
-**Delete_all_non_keys.py** <br />
+**Delete_All_Non_Keys.py** <br />
 - Generates updated *order_data.csv* and *con_data.csv* and names the new files *matched_order_data.csv* and *matched_con_data.csv*<br />
 
 **Explore_Data.py** <br />
@@ -34,10 +34,10 @@ It is important that the data files are used in the correct order - some datafil
 **Tendencies.py** <br />
 - Generates plot of weekly consumptions, orders and patients for medicines. <br />
 
-**Table_stats.py** <br />
+**Table_Stats.py** <br />
 - Generates a summery of the final dataset. <br />
 
-**Descriptive_statistics.py** <br />
+**Descriptive_Statistics.py** <br />
 - Generates the descriptive statistics needed for the project.  <br />
 
 **Weighted_Network.ipynb**  <br />
