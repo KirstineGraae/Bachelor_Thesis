@@ -6,11 +6,11 @@ from collections import Counter
 from sklearn.cluster import KMeans
 from scipy.cluster.hierarchy import dendrogram, linkage
 import json
-#import plotly.express as px
+import plotly.express as px
+from mpl_toolkits.mplot3d import Axes3D
+import plotly.express as px
 import pickle
 from scipy.stats import t
-
-
 # Load matched data
 con_data = pd.read_csv('./Data/matched_con_data.csv',sep=',',low_memory= False)
 order_data = pd.read_csv('./Data/matched_order_data.csv',sep=',',low_memory= False)
@@ -97,6 +97,27 @@ print('Percent of Cost of Class C :', df[df.Class == 'C']['AnnualConsumptionValu
 # Basic description
 print(df.describe())
 
+def count_orders(df,df1):
+    med = list(df.index)
+    count = []
+    for m in med:
+        d = df1[df1['Key'] == m]
+        q = 0
+        for week in range(1, 53, 1):
+            c = d['Number_of_Packages_w{}'.format(week)].sum()
+            if c != 0:
+                q += 1
+        count.append(q)
+    df['Count'] = count
+    return df
+
+def sizes(df):
+    df['Size'] = 1.5
+    return df
+
+
+df = count_orders(df,order_data)
+df = sizes(df)
 # Scatterplot
 ax1 = sns.set_style("darkgrid", {"grid.color": ".6", "grid.linestyle": ":"})
 fig, ax1 = plt.subplots(figsize=(12, 6))
@@ -108,7 +129,14 @@ ax1.set_xlabel('Quantity',fontsize=15)
 ax1.set_ylabel('Annual Consumption Value',fontsize=15)
 plt.savefig('./Figures/ABCScatter.png')
 plt.close('all')
+#3D
 
+sns.set_style("darkgrid", {"grid.color": ".6", "grid.linestyle": ":"})
+fig = px.scatter_3d(df,x='Qty',y='AnnualConsumptionValue',z='Count',color='Class',size='Size',opacity=0.7)
+fig.show()
+#plt.savefig('./Figures/ABCScatter3D.png')
+print(a)
+plt.close('all')
 
 # Graph
 performance = df['CumPct'].tolist()
